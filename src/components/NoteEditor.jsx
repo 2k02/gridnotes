@@ -1,18 +1,15 @@
-import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
+import { NotesContext } from '../context/noteContext'
 
-export const NoteEditor = ({ selectedNote, updateNote, titleFocus }) => {
-  const [note, setNote] = useState(null)
+export const NoteEditor = () => {
+  const { notes, selectedNote, updateNote, titleFocus } = useContext(NotesContext)
+
+  const note = notes.find(({ id }) => id === selectedNote)
 
   const handleChange = (event) => {
     const { name, value } = event.target
-    setNote({ ...note, [name]: value })
     updateNote({ ...note, [name]: value })
   }
-
-  useEffect(() => {
-    setNote(selectedNote)
-  }, [selectedNote])
 
   return (
     <div className=" lg:col-span-9 col-span-12 bg-secondary row-span-4 border border-line rounded-2xl p-6 ">
@@ -36,10 +33,4 @@ export const NoteEditor = ({ selectedNote, updateNote, titleFocus }) => {
       </div>
     </div>
   )
-}
-
-NoteEditor.propTypes = {
-  selectedNote: PropTypes.object,
-  updateNote: PropTypes.func,
-  titleFocus: PropTypes.object
 }

@@ -1,22 +1,9 @@
-import PropTypes from 'prop-types'
 import { addIcon, deleteIcon } from '../assets/icons'
+import { useContext } from 'react'
+import { NotesContext } from '../context/noteContext'
 
-export const NotesList = ({
-  notes,
-  selectedNote,
-  handleSelectNote,
-  handleAddNote,
-  handleDeleteNote
-}) => {
-  const addNote = () => {
-    const newNote = {
-      id: window.crypto.randomUUID(),
-      title: 'New title',
-      content: null,
-      date: new Date().toISOString()
-    }
-    handleAddNote(newNote)
-  }
+export const NotesList = () => {
+  const { notes, createNote, deleteNote, selectNote, selectedNote } = useContext(NotesContext)
 
   return (
     <div className="bg-secondary lg:col-span-3 col-span-12 row-span-3 border border-line rounded-2xl p-6 overflow-hidden">
@@ -35,13 +22,13 @@ export const NotesList = ({
                         ? 'text-active opacity-100'
                         : 'opacity-10'
                     }`}
-                    onClick={() => handleSelectNote(id)}
+                    onClick={() => selectNote(id)}
                   >
-                    {title}
+                    {title || 'No title'}
                   </span>
                   <span
                     className="relative translate-x-12 group-hover:-translate-x-0 transition-transform duration-300 cursor-pointer"
-                    onClick={() => handleDeleteNote(id)}
+                    onClick={() => deleteNote(id)}
                   >
                     {deleteIcon}
                   </span>
@@ -54,7 +41,7 @@ export const NotesList = ({
         </div>
         <span
           className="absolute bottom-0 right-0 cursor-pointer"
-          onClick={addNote}
+          onClick={createNote}
         >
           {addIcon}
         </span>
@@ -63,10 +50,3 @@ export const NotesList = ({
   )
 }
 
-NotesList.propTypes = {
-  notes: PropTypes.array,
-  selectedNote: PropTypes.string,
-  handleSelectNote: PropTypes.func,
-  handleAddNote: PropTypes.func,
-  handleDeleteNote: PropTypes.func
-}
